@@ -1,5 +1,17 @@
 " only basic stuff here, e.g. number, relativenumber, etc.
-source ~/.vimrc
+" source ~/.vimrc
+set relativenumber
+set number
+set incsearch
+" tabstop:          Width of tab character
+" softtabstop:      Fine tunes the amount of white space to be added
+" shiftwidth        Determines the amount of whitespace to add in normal mode
+" expandtab:        When this option is enabled, vi will use spaces instead of tabs
+set tabstop     =4
+set softtabstop =4
+set shiftwidth  =4
+set expandtab
+
 
 " ----------------------------------------------------- PLUGINS -----------------------------------------------------
 call plug#begin()
@@ -19,6 +31,7 @@ Plug 'preservim/nerdtree'
 
 " Fuzzy finder
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'  " Default commands
 
 " Markdown browser preview
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
@@ -48,6 +61,9 @@ Plug 'airblade/vim-gitgutter'
 " GitHub Copilot - have to set copilot_no_tab_map here because otherwise the annoying tab mapping persists
 let g:copilot_no_tab_map = v:true
 Plug 'github/copilot.vim'
+" Copilot chat - needs a python3 provider
+let g:python3_host_prog = '/usr/bin/python3'
+Plug 'CopilotC-Nvim/CopilotChat.nvim'
 
 call plug#end()
 " ----------------------------------------------------- PLUGINS -----------------------------------------------------
@@ -55,6 +71,22 @@ call plug#end()
 " lua code
 " TODO: write lua init instead of vimscript, organise into modules
 lua << EOF
+-- Copilot chat setup
+  require('CopilotChat').setup({
+    debug = false,
+    show_help = 'yes',
+    prompts = {
+      Explain = 'Explain how it works.',
+      Review = 'Review the following code and provide concise suggestions.',
+      Tests = 'Briefly explain how the selected code works, then generate unit tests.',
+      Refactor = 'Refactor the code to improve clarity and readability.',
+    },
+    build = function()
+      vim.notify('Please update the remote plugins by running :UpdateRemotePlugins, then restart Neovim.')
+    end,
+    event = 'VeryLazy',
+  })
+
   local cmp = require'cmp'
 
     cmp.setup({
@@ -84,21 +116,21 @@ lua << EOF
         })
     })
 
-    -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-    cmp.setup.cmdline({ '/', '?' }, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-            { name = 'buffer' }
-        }
-    })
+    -- -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+    -- cmp.setup.cmdline({ '/', '?' }, {
+    --     mapping = cmp.mapping.preset.cmdline(),
+    --     sources = {
+    --         { name = 'buffer' }
+    --     }
+    -- })
 
-    -- Use path source for ':'
-    cmp.setup.cmdline({ ':' }, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-            { name = 'path' }
-        }
-    })
+    -- -- Use path source for ':'
+    -- cmp.setup.cmdline({ ':' }, {
+    --     mapping = cmp.mapping.preset.cmdline(),
+    --     sources = {
+    --         { name = 'path' }
+    --     }
+    -- })
 
     -- additional capabilities supported by nvim-cmp
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -191,12 +223,6 @@ lua << EOF
 EOF
 " back to vimscript "
 
-" start NERDTree if no file is specified "
-if (@% == '')
-    autocmd VimEnter * NERDTree
-    autocmd VimEnter * 2windo set signcolumn=yes:1
-endif
-
 " style stuff "
 autocmd VimEnter * colorscheme doom-one
 autocmd VimEnter * set termguicolors
@@ -204,4 +230,3 @@ autocmd VimEnter * highlight EndOfBuffer guibg=none
 autocmd VimEnter * highlight Normal guibg=none
 autocmd VimEnter * highlight CursorLine guibg=none
 autocmd VimEnter * windo set colorcolumn=121
-

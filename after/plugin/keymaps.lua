@@ -73,6 +73,51 @@ function sync(server, filepath, remote_reporoot)
     return io.popen(cmd):read('*a')
 end
 
-function sync_current(server, remote_reporoot)
-    sync(server, vim.api.nvim_buf_get_name(0), remote_reporoot)
+function sync_current(opts)
+    sync(opts.fargs[1], vim.api.nvim_buf_get_name(0), opts.fargs[2])
 end
+
+vim.api.nvim_create_user_command('SshSyncCurrent', sync_current, { nargs='*' })
+
+-- display a float window for input
+function input_win(opts, on_confirm)
+    local title = opts.title or 'Input: '
+    local default = opts.default or ''
+
+    local default_win_config = {
+        relative = 'win',
+        focusable = true,
+        style = 'minimal',
+        border = 'rounded',
+        width = 100,
+        height = 1,
+        row = vim.api.nvim_win_get_height(0) / 2 - 1,
+        col = vim.api.nvim_win_get_width(0) / 2 - 100 / 2,
+        title = title,
+    }
+
+    local buf = vim.api.nvim_create_buf(false, true)
+    local win = vim.api.nvim_open_win(buf, true, default_win_config)
+    vim.api.nvim_buf_set_text(buf, 0, 0, 0, 0, { default })
+    vim.cmd('startinsert')
+    vim.api.nvim_win_set_cursor(win, { 1, vim.str_utfindex(default) + 1 })
+
+    local function close_and_execute()
+        local lines = vim.api.nvim_buf_get_lines(buf, 0, 1, false)
+        vim.api.nvim_win_close(win, true)
+        vim.cmd('stopinsert')
+        if on_confirm then
+            on_confirm(lines[1])
+        end
+    end
+    local function just_close()
+        vim.api.nvim_win_close(win, true)
+        vim.cmd('stopinsert')
+    end
+    vim.keymap.set({ 'n', 'i', 'v' }, '<CR>', close_and_execute, { buffer = buf })
+    vim.keymap.set({ 'n', 'i', 'v' }, '<Esc>', just_close, { buffer = buf })
+
+end
+
+-- map <Leader>g to Rg: <input from a float>
+vim.keymap.set('n', '<Leader>g', function() input_win({title = 'Search inside files: ', default = 'Rg '}, vim.cmd) end)
