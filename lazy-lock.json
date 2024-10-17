@@ -1,0 +1,6 @@
+{
+  "lazy.nvim": { "branch": "main", "commit": "1159bdccd8910a0fd0914b24d6c3d186689023d9" },
+  "nvim-colorizer.lua": { "branch": "master", "commit": "a065833f35a3a7cc3ef137ac88b5381da2ba302e" },
+  "tokyonight.nvim": { "branch": "main", "commit": "2c85fad417170d4572ead7bf9fdd706057bd73d7" },
+  "which-key.nvim": { "branch": "main", "commit": "8badb359f7ab8711e2575ef75dfe6fbbd87e4821" }
+}
