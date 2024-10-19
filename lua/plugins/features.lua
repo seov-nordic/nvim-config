@@ -37,9 +37,10 @@ return {
       { '<leader>b', '<cmd>Telescope buffers<cr>', desc = 'Telescope buffers' },
       { '<leader>h', '<cmd>Telescope help_tags<cr>', desc = 'Telescope help tags' },
     },
-    opts = { defaults = { mappings = { i = {
-        ['<C-j>'] = require('telescope.actions').move_selection_next,
-        ['<C-k>'] = require('telescope.actions').move_selection_previous,
-    }}}},
+    opts = function() return { defaults = { mappings = { i = {
+      -- needs to be a function because 'telescope' modules are not available on first install loading
+      ['<C-j>'] = require('telescope.actions').move_selection_next,
+      ['<C-k>'] = require('telescope.actions').move_selection_previous,
+    }}}} end,
   }
 }
