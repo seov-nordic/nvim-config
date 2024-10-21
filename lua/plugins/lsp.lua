@@ -102,6 +102,9 @@ return {
         }
       }
 
+      -- RUST LSP
+      lsp.rust_analyzer.setup{ capabilities = capabilities }
+
       -- PYTHON LSP
     end,
 
