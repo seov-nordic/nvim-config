@@ -56,6 +56,7 @@ return {
     keys = {
       { '<leader>gs', '<cmd>Git<cr>', desc = 'Git status' },
     },
+    cmd = { 'Git' },
   },
 
   {

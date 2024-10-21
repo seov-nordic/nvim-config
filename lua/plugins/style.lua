@@ -18,7 +18,8 @@ return {
         hl.CursorLineNr.bg = hl.CursorLine.bg
       end,
     },
-    init = function()
+    config = function(_, opts)
+      require('tokyonight').setup(opts)
       vim.cmd.colorscheme 'tokyonight-moon'
     end
   },
