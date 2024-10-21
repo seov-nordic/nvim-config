@@ -36,7 +36,12 @@ return {
       { '<leader>fg', '<cmd>Telescope live_grep<cr>', desc = 'Telescope live grep' },
       { '<leader>fb', '<cmd>Telescope buffers<cr>', desc = 'Telescope buffers' },
       { '<leader>fh', '<cmd>Telescope help_tags<cr>', desc = 'Telescope help tags' },
+
+      { '<leader>jr', function() require('telescope.builtin').lsp_references() end, desc = 'Jump to / list reference(s)' },
+      { '<leader>jd', function() require('telescope.builtin').lsp_definitions() end, desc = 'Jump to / list definition(s)' },
+      { '<leader>ji', function() require('telescope.builtin').lsp_implementations() end, desc = 'Jump to / list implementation(s)' },
     },
+    cmd = { 'Telescope' },
     opts = function()
       -- needs to be a function because 'telescope' modules are not available on first install loading
       local actions = require('telescope.actions')
@@ -47,7 +52,7 @@ return {
         ['<Esc>'] = actions.close,
       }
       return setup_opts
-      end,
+    end,
   },
 
   {
