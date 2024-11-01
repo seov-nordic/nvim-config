@@ -10,4 +10,4 @@ o.softtabstop = 4
 o.shiftwidth = 4
 o.expandtab = true
 
-wo.colorcolumn = 121
+wo.colorcolumn = '121'

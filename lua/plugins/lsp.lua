@@ -35,6 +35,10 @@ return {
           ['<Tab>'] = cmp.mapping.select_next_item(),
           ['<S-Tab>'] = cmp.mapping.select_prev_item(),
         }),
+        window = {
+          documentation = cmp.config.window.bordered(),
+          completion = cmp.config.window.bordered(),
+        }
       }
 
       -- SNIPPET mappings
@@ -61,6 +65,8 @@ return {
       lsp_setup.c()
       lsp_setup.lua()
       lsp_setup.rust()
+      lsp_setup.python()
+      lsp_setup.fish()
     end,
   }
 }

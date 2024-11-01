@@ -5,17 +5,17 @@ return {
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     opts = {
-      transparent = true,
       style = 'moon',
+      transparent = true,
       styles = {
         sidebars = 'transparent',
         floats = 'transparent',
       },
       on_highlights = function(hl, c)
-        hl.LineNr = { fg = c.fg_dark }
         hl.LineNrAbove = { fg = c.fg_dark }
         hl.LineNrBelow = { fg = c.fg_dark }
         hl.CursorLineNr.bg = hl.CursorLine.bg
+        hl.SignColumn = { fg = 'white' }
       end,
     },
     config = function(_, opts)
