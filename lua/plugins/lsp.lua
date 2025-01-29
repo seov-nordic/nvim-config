@@ -67,6 +67,7 @@ return {
       lsp_setup.rust()
       lsp_setup.python()
       lsp_setup.fish()
+      lsp_setup.cmake()
     end,
   }
 }

@@ -4,7 +4,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 function M.c()
   lsp.clangd.setup{
-    cmd = { 'clangd', '--query-driver', '/opt/gcc-arm-none-eabi/bin/arm-none-eabi-gcc,/usr/bin/gcc', '--enable-config' },
+    cmd = { 'clangd', '--query-driver', '/opt/**/bin/arm-*-eabi-gcc,/usr/bin/gcc', '--enable-config' },
     capabilities = capabilities,
   }
 end
@@ -58,6 +58,10 @@ end
 
 function M.fish()
   lsp.fish_lsp.setup{ capabilities = capabilities }
+end
+
+function M.cmake()
+  lsp.neocmake.setup{ capabilities = capabilities }
 end
 
 return M

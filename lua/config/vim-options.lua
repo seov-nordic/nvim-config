@@ -11,3 +11,5 @@ o.shiftwidth = 4
 o.expandtab = true
 
 wo.colorcolumn = '121'
+
+vim.api.nvim_create_autocmd('BufEnter' , { pattern = "*.overlay", command = "set filetype=devicetree" })

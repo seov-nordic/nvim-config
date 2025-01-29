@@ -13,5 +13,10 @@ map('n', '<C-h>', vim.cmd.bprevious)
 
 map('n', '<C-c>', vim.cmd.noh)
 
+-- yanking to system clipboard
 map('n', 'Y', '"+y')
 map('v', 'Y', '"+y')
+
+-- movement
+map('n', '<C-d>', '<C-d>zz')
+map('n', '<C-u>', '<C-u>zz')

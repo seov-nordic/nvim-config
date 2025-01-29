@@ -31,5 +31,16 @@ return {
       { "<leader>cl", "<cmd>ColorizerAttachToBuffer<cr>", desc = "Colorizer" },
     },
     opts = {}
-  }
+  },
+
+  {
+    "echasnovski/mini.nvim", version = "*",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("mini.starter").setup()
+      require("mini.diff").setup()
+      require("mini.git").setup()
+      require("mini.statusline").setup()
+    end
+  },
 }
