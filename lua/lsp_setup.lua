@@ -1,17 +1,33 @@
 local M = {}
 local lsp = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local border = {
+  {'🭽', 'FloatBorder'},
+  {'▔', 'FloatBorder'},
+  {'🭾', 'FloatBorder'},
+  {'▕', 'FloatBorder'},
+  {'🭿', 'FloatBorder'},
+  {'▁', 'FloatBorder'},
+  {'🭼', 'FloatBorder'},
+  {'▏', 'FloatBorder'},
+}
+local handlers = {
+  ['textDocument/hover'] =  vim.lsp.with(vim.lsp.handlers.hover, {border = border}),
+  ['textDocument/signatureHelp'] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = border }),
+}
 
 function M.c()
   lsp.clangd.setup{
-    cmd = { 'clangd', '--query-driver', '/opt/**/bin/arm-*-eabi-gcc,/usr/bin/gcc', '--enable-config' },
     capabilities = capabilities,
+    handlers = handlers,
+    cmd = { 'clangd', '--query-driver', '/opt/**/bin/arm-*-eabi-gcc,/usr/bin/gcc', '--enable-config' },
   }
 end
 
 function M.lua()
   lsp.lua_ls.setup{
     capabilities = capabilities,
+    handlers = handlers,
     on_init = function(client)
       if client.workspace_folders then
         local path = client.workspace_folders[1].name
@@ -36,32 +52,24 @@ function M.lua()
     end,
     settings = {
       Lua = {}
-    }
-  }
-end
-
-function M.rust()
-  lsp.rust_analyzer.setup{ capabilities = capabilities }
-end
-
-function M.python()
-  lsp.basedpyright.setup{
-    cmd = { 'basedpyright-langserver', '--stdio', '--level error'},
-    capabilities = capabilities,
-    settings = {
-      basedpyright = {
-        typeCheckingMode = "standard",
-      },
     },
   }
 end
 
+function M.rust()
+  lsp.rust_analyzer.setup{ capabilities = capabilities, handlers = handlers }
+end
+
+function M.python()
+  lsp.pylsp.setup{ capabilities = capabilities, handlers = handlers }
+end
+
 function M.fish()
-  lsp.fish_lsp.setup{ capabilities = capabilities }
+  lsp.fish_lsp.setup{ capabilities = capabilities, handlers = handlers }
 end
 
 function M.cmake()
-  lsp.neocmake.setup{ capabilities = capabilities }
+  lsp.neocmake.setup{ capabilities = capabilities, handlers = handlers }
 end
 
 return M

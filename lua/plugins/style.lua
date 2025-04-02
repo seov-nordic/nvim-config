@@ -1,3 +1,27 @@
+local HEADER_SHADOW = [[
+███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
+████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
+██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
+██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
+██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
+╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]]
+
+local HEADER_LEAN = [[
+    _/      _/  _/_/_/_/    _/_/    _/      _/  _/_/_/  _/      _/
+   _/_/    _/  _/        _/    _/  _/      _/    _/    _/_/  _/_/
+  _/  _/  _/  _/_/_/    _/    _/  _/      _/    _/    _/  _/  _/
+ _/    _/_/  _/        _/    _/    _/  _/      _/    _/      _/
+_/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/]]
+
+local HEADER_SPEED = [[
+_____   ____________________    ______________  ___
+___  | / /__  ____/_  __ \_ |  / /___  _/__   |/  /
+__   |/ /__  __/  _  / / /_ | / / __  / __  /|_/ /
+_  /|  / _  /___  / /_/ /__ |/ / __/ /  _  /  / /
+/_/ |_/  /_____/  \____/ _____/  /___/  /_/  /_/]]
+
+local HEADERS = { HEADER_SHADOW, HEADER_LEAN, HEADER_SPEED }
+
 return {
   -- the colorscheme should be available when starting Neovim
   {
@@ -37,7 +61,20 @@ return {
     "echasnovski/mini.nvim", version = "*",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
-      require("mini.starter").setup()
+      local starter = require("mini.starter")
+      math.randomseed(os.time())
+      local header = HEADERS[math.random(1, 3)]
+      starter.setup{
+        header = header,
+        items = {
+          starter.sections.telescope(),
+          starter.sections.builtin_actions(),
+        },
+        content_hooks = {
+          starter.gen_hook.adding_bullet(),
+          starter.gen_hook.aligning('center', 'center'),
+        },
+      }
       require("mini.diff").setup()
       require("mini.git").setup()
       require("mini.statusline").setup()
