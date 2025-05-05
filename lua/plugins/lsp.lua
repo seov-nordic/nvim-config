@@ -61,12 +61,13 @@ return {
       "hrsh7th/cmp-nvim-lsp",  -- cmp source
     },
     config = function()
+      vim.diagnostic.config({ virtual_text = true })
       local lsp_setup = require('lsp_setup')
       lsp_setup.c()
       lsp_setup.lua()
       lsp_setup.rust()
       lsp_setup.python()
-      lsp_setup.fish()
+      lsp_setup.bash()
       lsp_setup.cmake()
     end,
   }

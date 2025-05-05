@@ -55,6 +55,7 @@ return {
     lazy = true,
     keys = {
       { '<leader>t', '<cmd>NvimTreeToggle<cr>', desc = 'Toggle file tree view' },
+      { '<leader>T', '<cmd>NvimTreeFindFile<cr>', desc = 'Show current file in tree view' },
     },
     opts = {},
   },

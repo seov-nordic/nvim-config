@@ -68,6 +68,10 @@ function M.fish()
   lsp.fish_lsp.setup{ capabilities = capabilities, handlers = handlers }
 end
 
+function M.bash()
+  lsp.bashls.setup{ capabilities = capabilities, handlers = handlers }
+end
+
 function M.cmake()
   lsp.neocmake.setup{ capabilities = capabilities, handlers = handlers }
 end
