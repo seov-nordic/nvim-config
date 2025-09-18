@@ -62,9 +62,13 @@ return {
 
   {
     'iamcco/markdown-preview.nvim',
+    version = '*',
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
     ft = { "markdown" },
-    build = function() vim.fn["mkdp#util#install"]() end,
+    build = function()
+      vim.cmd [[Lazy load markdown-preview.nvim]]
+      vim.fn["mkdp#util#install"]()
+    end,
     init = function()
       vim.g.mkdp_auto_close = 0
     end,
