@@ -1,14 +1,14 @@
 return {
   -- COMPLETION
   {
-    "hrsh7th/nvim-cmp",
+    'hrsh7th/nvim-cmp',
     dependencies = {
       -- snippet engine
-      "hrsh7th/cmp-vsnip",
-      "hrsh7th/vim-vsnip",
+      'hrsh7th/cmp-vsnip',
+      'hrsh7th/vim-vsnip',
       -- more sources
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
     },
     config = function()
       local cmp = require('cmp')
@@ -17,7 +17,7 @@ return {
         snippet = {
           -- REQUIRED - snippet engine
           expand = function(args)
-            vim.fn["vsnip#anonymous"](args.body)
+            vim.fn['vsnip#anonymous'](args.body)
           end,
         },
         sources = cmp.config.sources({
@@ -35,6 +35,20 @@ return {
           ['<Tab>'] = cmp.mapping.select_next_item(),
           ['<S-Tab>'] = cmp.mapping.select_prev_item(),
         }),
+        formatting = {
+          -- cap entry width so long signatures don't blow up the menu
+          -- (and starve the documentation window of horizontal space)
+          format = function(_, item)
+            local MAX = 30
+            if vim.api.nvim_strwidth(item.abbr) > MAX then
+              item.abbr = vim.fn.strcharpart(item.abbr, 0, MAX) .. '…'
+            end
+            if item.menu and vim.api.nvim_strwidth(item.menu) > MAX then
+              item.menu = vim.fn.strcharpart(item.menu, 0, MAX) .. '…'
+            end
+            return item
+          end,
+        },
         window = {
           documentation = cmp.config.window.bordered(),
           completion = cmp.config.window.bordered(),
@@ -45,37 +59,32 @@ return {
       local map = vim.keymap.set
       local m_opts = { noremap = true, silent = true, expr = true }
       map('i', '<Tab>', function()
-        return vim.fn["vsnip#jumpable"](1) == 1 and "<Plug>(vsnip-jump-next)" or "<Tab>"
+        return vim.fn['vsnip#jumpable'](1) == 1 and '<Plug>(vsnip-jump-next)' or '<Tab>'
       end, m_opts)
       map('s', '<Tab>', function()
-        return vim.fn["vsnip#jumpable"](1) == 1 and "<Plug>(vsnip-jump-next)" or "<Tab>"
+        return vim.fn['vsnip#jumpable'](1) == 1 and '<Plug>(vsnip-jump-next)' or '<Tab>'
       end, m_opts)
     end,
   },
 
-  -- fix cmp-nvim-lsp to a specific commit still compatible with neovim 0.10.4
-  {
-    'hrsh7th/cmp-nvim-lsp',
-    commit = 'a8912b88ce488f411177fc8aed358b04dc246d7b',
-  },
-
   -- LSPs
   {
-    "neovim/nvim-lspconfig",
+    'neovim/nvim-lspconfig',
     lazy = false,
-    version = '2.5.0',
     dependencies = {
-      "hrsh7th/cmp-nvim-lsp",  -- cmp source
+      'hrsh7th/cmp-nvim-lsp',  -- cmp source
     },
     config = function()
       vim.diagnostic.config({ virtual_text = true })
-      local lsp_setup = require('lsp_setup')
+      -- global config - add capabilities
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      vim.lsp.config('*', { capabilities = capabilities })
+      -- some servers require extra config
+      local lsp_setup = require('config.lsp_setup')
       lsp_setup.c()
       lsp_setup.lua()
-      lsp_setup.rust()
-      lsp_setup.python()
-      lsp_setup.bash()
-      lsp_setup.cmake()
+      -- enable all that I need to start them automatically on buffer enter
+      vim.lsp.enable{ 'clangd', 'dts_lsp', 'neocmake', 'lua_ls', 'pylsp', 'bashls', 'rust_analyzer' }
     end,
   },
 }
