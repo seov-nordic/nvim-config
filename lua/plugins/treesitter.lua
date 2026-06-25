@@ -1,6 +1,8 @@
 return {
   {
     'nvim-treesitter/nvim-treesitter',
+    -- 0.11 compatibality branch
+    branch = 'master',
     opts = {
       ensure_installed = { 'c', 'lua', 'python', 'rust', 'markdown', 'cmake', 'kconfig' },
       sync_install = true,
@@ -16,11 +18,13 @@ return {
   },
 
   {
-    'nvim-treesitter/nvim-treesitter-context'
+    'nvim-treesitter/nvim-treesitter-context',
+    branch = 'master',
   },
 
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
+    branch = 'master',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     opts = {
       textobjects = {
